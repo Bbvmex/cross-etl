@@ -1,11 +1,21 @@
 import pytest
 
+import random
 from crossETL.transform import quicksort
 
-def test_sorted(array):
-    test_array = []
-    with open('data.txt', 'r') as inFile:
-        for line in inFile:
-            test_array.append(float(line))
-    assert quicksort(array) == test_array.sort()
+@pytest.fixture
+def test_array():
+    return [random.uniform(0,10) for i in range(10000)]
+
+@pytest.fixture
+def ordered_array(test_array):
+    ordered_array = test_array.copy()
+    ordered_array.sort()
+    return ordered_array
+
+def test_quicksort(test_array, ordered_array):
+    assert quicksort(test_array) != test_array
+    assert quicksort(test_array) == ordered_array
+
+
     

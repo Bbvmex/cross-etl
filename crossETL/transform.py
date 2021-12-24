@@ -1,6 +1,11 @@
 from random import randint
 
 def quicksort(array):
+    '''Simple implementation of Quicksort
+    As the array is "random", the pivot is the first element
+    (If the array is already a little sorted, it would be the worst case scenario)
+    Worst case: O(n²) / Average: O(n*log n)'''
+    
     if len(array) < 2:
         return array
     else:
