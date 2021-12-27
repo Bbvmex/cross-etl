@@ -1,7 +1,7 @@
 import requests
 from requests.models import Response
 
-class api_extractor():
+class ApiExtractor():
     '''Class for handling the API data
     Extracts data from all pages
     Stops when reading a []
@@ -35,7 +35,7 @@ class api_extractor():
     
     def extract_api(self) -> list:
         while response := self.get_page():
-            print(self.page)
+            # print(self.page)
             self.tries = 0
             data = response.json()
             if 'error' in data.keys():
@@ -47,6 +47,7 @@ class api_extractor():
                 self.output.extend(data['numbers'])
                 self.page += 1
 
+'''
 def extract_api():
     # Using requests, 
     link = 'http://challenge.dienekes.com.br/api/numbers?page='
@@ -80,11 +81,11 @@ def extract_api():
             if tries == 3:
                 raise requests.ConnectionError
             continue
-
+'''
 
 if __name__ == '__main__':
     # teste = extract_api()
-    extractor = api_extractor()
+    extractor = ApiExtractor()
     teste2 = extractor.extract_api()
     with open('data2.txt', 'w') as f:
         for item in teste2:

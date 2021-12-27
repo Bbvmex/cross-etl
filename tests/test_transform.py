@@ -14,8 +14,11 @@ def ordered_array(test_array):
     return ordered_array
 
 def test_quicksort(test_array, ordered_array):
-    assert quicksort(test_array) != test_array
     assert quicksort(test_array) == ordered_array
+
+def test_not_initially_ordered(test_array):
+    assert quicksort(test_array) != test_array
+
 
 
     
