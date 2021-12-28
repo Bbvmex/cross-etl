@@ -17,11 +17,13 @@ def quicksort(array):
 
 
 if __name__ == '__main__':
+    import csv
     array = []
-    with open('data.txt', 'r') as inFile:
+    with open('crossETL/data.txt', 'r') as inFile:
         for line in inFile:
             array.append(float(line))
     #array = [2,5,8,4,1,6,3,23,6,10]
     sorted = quicksort(array)
-    array2 = array.copy()
-    array2.sort()
+    with open('crossETL/data_sorted.csv', 'w') as outFile:
+        writer = csv.writer(outFile)
+        writer.writerow(sorted)
