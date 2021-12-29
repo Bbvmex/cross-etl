@@ -15,11 +15,11 @@ def return_data():
             break
     return jsonify(data)
 
-
-@app.route('/', methods=['GET'])
-def hello_world():
-    return 'hello world'
+def start_app():
+    app.run()
 
 if __name__ == '__main__':
-
-    app.run()
+    start_app()
+    # In another window
+    # teste = requests.get('http://127.0.0.1:5000/api/load/')
+    # print(len(teste.json()))
