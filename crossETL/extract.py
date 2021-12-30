@@ -55,6 +55,6 @@ if __name__ == '__main__':
     import json
     extractor = ApiExtractor()
     data = extractor.extract_api()
-    with open('data.csv', 'w') as outFile:
+    with open('data.json', 'w') as outFile:
         json.dump(data, outFile)
     

@@ -1,25 +1,22 @@
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 import csv
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
+app.data = []
 
 # Using a Mock DB (.csv)
-@app.route('/api/load/', methods=['GET'])
-def return_data():
-    data = []
-    with open('crossETL/data_sorted.csv', 'r') as inFile:
-        reader = csv.reader(inFile)
-        for row in reader:
-            data = [float(i) for i in row]
-            break
-    return jsonify(data)
+@app.route('/api/load/', methods=['GET', 'POST'])
+def data():
+    if request.method == 'GET':
+        return jsonify(app.data)
+
+    if request.method == 'POST':
+        app.data = request.json
+        return jsonify({'msg': 'Data added'})
 
 def start_app():
     app.run()
 
 if __name__ == '__main__':
     start_app()
-    # In another window
-    # teste = requests.get('http://127.0.0.1:5000/api/load/')
-    # print(len(teste.json()))

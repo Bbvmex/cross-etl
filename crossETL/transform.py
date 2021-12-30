@@ -1,5 +1,3 @@
-from random import randint
-
 def quicksort(array):
     '''Simple implementation of Quicksort
     As the array is "random", the pivot is the first element
@@ -17,13 +15,9 @@ def quicksort(array):
 
 
 if __name__ == '__main__':
-    import csv
-    array = []
-    with open('crossETL/data.txt', 'r') as inFile:
-        for line in inFile:
-            array.append(float(line))
-    #array = [2,5,8,4,1,6,3,23,6,10]
+    import json
+    with open('crossETL/data.json', 'r') as inFile:
+        array = json.load(inFile)
     sorted = quicksort(array)
-    with open('crossETL/data_sorted.csv', 'w') as outFile:
-        writer = csv.writer(outFile)
-        writer.writerow(sorted)
+    with open('crossETL/data_sorted.json', 'w') as outFile:
+        json.dump(outFile)
