@@ -15,7 +15,14 @@ def data():
         app.data = request.json
         return jsonify({'msg': 'Data added'})
 
-def start_app():
+def create_app() -> Flask:
+    app = Flask(__name__)
+    app.config['DEBUG'] = True
+    app.data = []
+    return app
+
+def start_app() -> None:
+    app = create_app()
     app.run()
 
 if __name__ == '__main__':
