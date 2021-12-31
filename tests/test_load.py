@@ -6,13 +6,15 @@ from crossETL.load import create_app
 
 @pytest.fixture
 def client():
-    app = create_app()
-    app.config['TESTING'] = True
-    with app.test_client() as client:
-        yield client
+    test_app = create_app()
+    test_app.config['TESTING'] = True
+    with test_app.test_client() as client:
+        with test_app.app_context():
+            yield client
 
 def test_api_load_post(client):
-    r = client.post('/api/load/', json=json.load([1.5, 3.55, 4.2]))
-    assert r == 200
-    assert r.json() == [1.5, 3.55, 4.2]
-    assert client.data == [1.5, 3.55, 4.2]
+    p = client.post('/api/load', json=json.dumps([1.5, 3.55, 4.2]))
+    assert p.status_code == 200
+    r = client.get('api/load')
+    assert r.status_code == 200
+    assert r.json == json.dumps([1.5, 3.55, 4.2])

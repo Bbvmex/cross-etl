@@ -17,7 +17,7 @@ def mock_response_error():
     return mock_response
 
 
-def test_get_page_success(mocker, extractor):
+def test_get_next_page_success(mocker, extractor):
     def mock_json():
         return {'numbers': [1,2,3]}
     def mock_get_success(link):
@@ -29,10 +29,10 @@ def test_get_page_success(mocker, extractor):
         'crossETL.extract.requests.get',
         mock_get_success
     )
-    response = extractor.get_page()
+    response = extractor.get_next_page()
     assert response.status_code == 200
 
-def test_get_page_fail(mocker, extractor):
+def test_get_next_page_fail(mocker, extractor):
     def mock_get_fail(link):
         response = Response()
         response.status_code = 500
@@ -48,7 +48,7 @@ def test_get_page_fail(mocker, extractor):
         'crossETL.extract.ApiExtractor.handle_get_error',
         mock_handle_error
     )
-    response = extractor.get_page()
+    response = extractor.get_next_page()
     assert response is None
     assert extractor.tries == 3
 
@@ -86,7 +86,7 @@ def test_handle_get_error(extractor):
 def test_extract_api(mocker, extractor):
     def mock_json(self):
         return self.mock_json
-    def mock_get_page(self):
+    def mock_get_next_page(self):
         response = Response()
         response.status_code = 0
         if self.page <= 3:
@@ -100,9 +100,9 @@ def test_extract_api(mocker, extractor):
         mock_json
     )
     mocker.patch(
-        'crossETL.extract.ApiExtractor.get_page',
-        mock_get_page
+        'crossETL.extract.ApiExtractor.get_next_page',
+        mock_get_next_page
     )
     output = extractor.extract_api()
     assert extractor.page == 4
-    assert output == [1,2,3, ]
+    assert output == [1,2,3]

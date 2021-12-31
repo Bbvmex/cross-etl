@@ -12,28 +12,26 @@ class ApiExtractor():
         self.output = []
         self.tries = 0
 
-    def get_page(self) -> Response:
-        print(self.page)
-        response = requests.get(self.link+str(self.page))
-        self.response = response
-        if response.status_code == 200:
-            if not self.error_in_response(response):
-                self.page += 1
-                self.tries = 0
-                return response
-            else:
-                pass
-        else:
-            self.handle_get_error()
-            if self.tries < 3:
-                return self.get_page()
-
-    def error_in_response(self, response) -> None:
+    @staticmethod
+    def error_in_response(response) -> None:
         '''Handles custom errors returned by the consulted API'''
         if 'error' in response.json().keys():
             return True
         else:
             return False
+
+    def get_next_page(self) -> Response:
+        print(self.page)
+        response = requests.get(f'{self.link}{self.page!s}')
+        self.response = response
+        if response.status_code == 200 and not error_in_response(response):
+            self.page += 1
+            self.tries = 0
+            return response
+        else:
+            self.handle_get_error()
+            if self.tries < 3:
+                return self.get_next_page()
 
     def handle_get_error(self) -> None:
         '''Raise an exception after 3 unsuccessful tries
@@ -44,7 +42,7 @@ class ApiExtractor():
             raise requests.ConnectionError
     
     def extract_api(self) -> list:
-        while response := self.get_page():
+        while response := self.get_next_page():
             data = response.json()
             if data['numbers'] == []:
                 return self.output 
@@ -55,6 +53,6 @@ if __name__ == '__main__':
     import json
     extractor = ApiExtractor()
     data = extractor.extract_api()
-    with open('data.json', 'w') as outFile:
+    with open('crossETL/data.json', 'w') as outFile:
         json.dump(data, outFile)
     
